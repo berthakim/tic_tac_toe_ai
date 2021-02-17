@@ -1,2 +1,2 @@
-# tic_tac_toe_ai
-Tic-Tac-Toe with AI elements
+# Tic-Tac-Toe with AI
+Tic-Tac-Toe with some AI elements
