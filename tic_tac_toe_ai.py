@@ -1,22 +1,15 @@
-# final
+# three
 # cells = '_XXOO_OX_'
 cells = input("Enter the cells: ")
 a = ' '.join(cells[:3]).split()
 b = ' '.join(cells[3:6]).split()
 g = ' '.join(cells[6:10]).split()
-
-field = []
 field = [a] + [b] + [g]
 
-# func for replace '_' by ' '
-def modif(a):
-    if a == '_':
-        return ' '
-    return a
-# replace
+# lambda func for replace '_' by ' '
+replace_underscore = lambda x: ' ' if x == '_' else x
 for i in range(3):
-    field[i] = [modif(j) for j in field[i]]
-
+    field[i] = [replace_underscore(j) for j in field[i]]
 
 def print_table(matrix):
     print("---------")
@@ -65,50 +58,23 @@ def make_the_move(matrix, coord1, coord2):
     else:
         matrix[coord1][coord2] = "O"
         return matrix
-
+    
 def state(matrix):
-    # who win, X or O?
-    if any([i for i in matrix if i == ['X', 'X', 'X']]):
-        return "X wins"
-    elif any([i for i in matrix if i == ['O', 'O', 'O']]):
-        return "O wins"
-    
-    for j in range(3):
-        if [field[0][j], field[1][j], field[2][j]] == ['X', 'X', 'X']:
-            return "X wins"
-        elif [field[0][j], field[1][j], field[2][j]] == ['O', 'O', 'O']:
-            return "O wins"
-        
-    if [field[0][0], field[1][1], field[2][2]] == ['X', 'X', 'X']:
-        return "X wins"
-    elif [field[2][0], field[1][1], field[0][2]] == ['X', 'X', 'X']:
-        return "X wins"
-    elif [field[0][0], field[1][1], field[2][2]] == ['O', 'O', 'O']:
-        return "O wins"
-    elif [field[2][0], field[1][1], field[0][2]] == ['O', 'O', 'O']:
-        return "O wins"
-    
-    # True if the table still has empty cells
-    elif any([i for i in matrix if ' ' in i]):
-        return "Game not finished"
-    else:  # the matrix is complete
-        return "Draw"
-    
-    
-def state_v2(a):
-    rule = [a[:3], a[3:6], a[6:], a[0:9:3], a[1:9:3], a[2:9:3], a[0:9:4], a[2:7:2]]
-    if (['X', 'X', 'X'] in rule and ['O', 'O', 'O'] in rule) or abs(a.count("X") - a.count("O")) >= 2:
+    m = [val for sublist in field for val in sublist]  # from 2d to 1d array
+    # all patterns of possbile winning cases 
+    rule = [m[:3], m[3:6], m[6:], m[0:9:3], m[1:9:3], m[2:9:3], m[0:9:4], m[2:7:2]]
+    if (['X', 'X', 'X'] in rule and ['O', 'O', 'O'] in rule) or abs(matrix.count("X") - matrix.count("O")) >= 2:
         return "Impossible"
     elif ['X', 'X', 'X'] in rule:
         return "X wins"
     elif ['O', 'O', 'O'] in rule:
         return "O wins"
-    elif a.count(" ") == 0:
-        return "Draw"
-    elif a.count(" ") != 0:
+    elif any([i for i in matrix if ' ' in i]):  # return bool
         return "Game not finished"
+    else:  # the matrix is complete
+        return "Draw"
 
 print_table(field)
 check_input(field)
 print_table(field)
-print(state_v2(field))
+print(state(field))
